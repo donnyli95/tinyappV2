@@ -1,29 +1,24 @@
+// import data
+const { urlDatabase, users } = require('../scripts/data');
+const { generateRandomString, emailExists, passwordMatch, getID, urlsForUser} = require('../scripts/helperFunctions');
+
 // express server setup
 const express = require("express");
 const app = express();
 const PORT = 8080;
 const bodyParser = require("body-parser");
+const bcrypt = require('bcrypt');
+const cookieSession = require('cookie-session');
 
-// ejs import
+
 app.set("view engine", "ejs");
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("styles"));
-
-//replaced cookie-parser with cookie-session
-const cookieSession = require('cookie-session');
 app.use(cookieSession({
   name: 'session',
   keys: ['key1']
 }));
 
-//hashing password with bcrypt
-const bcrypt = require('bcrypt');
-
-// import data
-const { urlDatabase, users } = require('../scripts/data');
-
-// Server listening
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
 });
@@ -32,6 +27,25 @@ app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
 
+//Function: Render error page with relevant status code
+const renderErrorPage = (req, res, errorNumber, errorMessage) => {
+  const templateVars = {
+    errorMessage: errorMessage
+  }
+  res.status(errorNumber).render("errors", templateVars);
+}
+
+//Function: update url database and redirect
+const updateURL = (req, res) => {
+  let shortURL = generateRandomString();
+  urlDatabase[shortURL] = {
+    longURL: req.body.newURL,
+    userID: req.session["user_id"]
+  };
+  res.redirect(`/urls/${shortURL}`);
+}
+
+//Initial Page Redirection
 app.get("/", (req, res) => {
   if (req.session["user_id"]) {
     res.redirect("/urls");
@@ -40,32 +54,160 @@ app.get("/", (req, res) => {
   }
 });
 
+app.get("/urls", (req, res) => {
+  if (!req.session["user_id"]) {
+    renderErrorPage(req, res, 403, 'Please Log In First :)');
+  } else {
+    const templateVars = {
+      urls: urlsForUser(req.session["user_id"], urlDatabase),
+      serverCookies: req.session,
+      displayName: users[req.session["user_id"]].email
+    };
+    res.render("urls_index", templateVars);
+  }
+});
+
+app.get("/urls/new", (req, res) => {
+  //Check if logged in
+  if (!req.session["user_id"]) {
+    res.redirect("/login");
+  } else {
+    res.render("urls_new");
+  }
+});
+
+// Shows specific URL information
+app.get("/urls/:shortURL", (req, res) => {
+  const urlArray = Object.keys(urlsForUser(req.session["user_id"], urlDatabase));
+  // Check if logged in
+  if (!req.session["user_id"]) {
+    renderErrorPage(req, res, 403, 'Please Log In First :)');
+  } else if (!urlArray.includes(req.params.shortURL)) {
+    renderErrorPage(req, res, 403, 'Not Yours');
+  } else {
+    const templateVars = {
+      urlArray: urlArray,
+      shortURL: req.params.shortURL,
+      longURL: urlDatabase[req.params.shortURL].longURL,
+      serverCookies: req.session,
+      displayName: users[req.session["user_id"]].email
+    };
+    res.render("urls_show", templateVars);
+  }
+});
+
+//Redirect to actual url link when clicked
+app.get("/u/:shortURL", (req, res) => {
+  if (!urlDatabase[req.params.shortURL]) {
+    renderErrorPage(req, res, 403, 'Short URL Does Not Exist');
+  } else {
+    res.redirect(urlDatabase[req.params.shortURL].longURL);
+  }
+});
+
+
+
+// Adding more urls
+app.post("/urls", (req, res) => {
+  if (!req.session["user_id"]) {
+    renderErrorPage(req, res, 403, 'Please Log In First :)');
+  } else if (!req.body.newURL.includes('http://') || !req.body.newURL.includes('https://')) {
+    renderErrorPage(req, res, 403, "Did you include 'http(s)://?'");
+  } else {
+    updateURL(req, res);
+  }
+});
+
+
+//Update long URL of short URL
+app.post("/urls/:shortURL", (req, res) => {
+  //Check if logged in
+  if (!req.session["user_id"]) {
+    renderErrorPage(req, res, 403, 'Please Log In');
+  } else if (!req.body.newURL.includes('http://') || !req.body.newURL.includes('https://')) {
+    renderErrorPage(req, res, 403, "Did you include 'http(s)://?'");
+  } else {
+    updateURL(req, res);
+  }
+});
+
+// Delete URLs from list
+app.post("/urls/:shortURL/delete", (req, res) => {
+  //Check if logged in
+  if (!req.session["user_id"]) {
+    renderErrorPage(req, res, 403, "You can't delete what's not yours");
+  } else {
+    delete urlDatabase[req.params.shortURL];
+    res.redirect(`/urls`);
+  }
+});
+
+// Redirects to short URL info page
+app.post("/urls/:shortURL/edit", (req, res) => {
+  //Check if logged in
+  if (!req.session["user_id"]) {
+    renderErrorPage(req, res, 403, "You can't edit what's not yours");
+  } else {
+    let shortURL = req.params.shortURL;
+    res.redirect(`/urls/${shortURL}`);
+  }
+});
+
 app.get("/login", (req, res) => {
-  res.render("login");
+  if (!req.session["user_id"]) {
+    const templateVars = {
+      urls: urlDatabase,
+      serverCookies: req.session
+    };
+    res.render("login", templateVars);
+  } else {
+    res.redirect("/urls");
+  }
 });
 
 app.get("/register", (req, res) => {
-  res.render("register");
+  //Check if logged in
+  if (!req.session["user_id"]) {
+    const templateVars = {
+      serverCookies: req.session
+    };
+    res.render("register", templateVars);
+  } else {
+    res.redirect("/urls");
+  }
 });
 
-app.get("/errors", (req, res) => {
-  res.render("errors");
+//Login Post Method
+app.post("/login", (req, res) => {
+  //Check if user exists
+  if (!emailExists(req.body.email, users)) {
+    renderErrorPage(req, res, 403, "Please register first!");
+  } else if (!passwordMatch(req.body.email, req.body.psw, users)) {
+    renderErrorPage(req, res, 403, "Wrong password");
+  } else {
+    req.session["user_id"] = getID(req.body.email, users);
+    res.redirect("/urls");
+  }
 });
 
-app.get("/urls_index", (req, res) => {
-  res.render("urls_index");
-});
-
-app.get("/urls_new", (req, res) => {
-  res.render("urls_new");
-});
-
-app.get("/urls_show", (req, res) => {
-  res.render("urls_show");
-});
-
-app.get("/urls", (req, res) => {
-    res.render("urls_index");
+//Register Post Method
+app.post("/register", (req, res) => {
+  let randomID = generateRandomString();
+  //Check if email & password inputs are empty
+  if (!req.body.email.length || !req.body.psw.length) {
+    renderErrorPage(req, res, 403, "Please Fill Out BOTH Fields");
+    // Check if user exists
+  } else if (emailExists(req.body.email, users)) {
+    renderErrorPage(req, res, 403, "Wrong password (For this webpage at least...)");
+  } else {
+    users[randomID] = {
+      id: randomID,
+      email: req.body.email,
+      password: bcrypt.hashSync(req.body.psw, 10)
+    };
+    req.session["user_id"] = randomID;
+    res.redirect("/urls");
+  }
 });
 
 //Logout
