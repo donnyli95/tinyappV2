@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- App CSS -->
+    <link rel="stylesheet" href="css/stylesheet.css" type="text/css"/>
+
+  <title>TinyApp</title>
+</head>
+
+<body>
+  <%- include('partials/_header') %>
+    <main>
+      <% if(typeof serverCookies==='undefined' ){ %>
+        <h1><%= errorMessage %></h1>
+      <% } else{ %>
+        <h3>My URLs</h3>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Short URL</th>
+              <th scope="col">Long URL</th>
+              <th scope="col">Edit</th>
+              <th scope="col">Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            </form>
+            <% for(let url in urls) { %>
+              <tr>
+                <td><%= url %></td>
+                <td><%= urls[url].longURL %></td>
+                <td>
+                  <form method="POST" action="/urls/<%= url %>/edit"><button type="submit">Edit</button></form>
+                </td>
+                <td>
+                  <form method="POST" action="/urls/<%= url %>/delete"><button type="submit">Delete</button></form>
+                </td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+      <% } %>
+    </main>
+</body>
+
+</html>

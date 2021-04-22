@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- App CSS -->
+    <link rel="stylesheet" href="css/stylesheet.css" type="text/css"/>
+    
+  <title>TinyApp</title>
+</head>
+
+<body>
+  <%- include('partials/_header') %>
+    <main>
+      <h3>User Login</h3>
+      <form action="/login" method="POST">
+        <label for="email"><b>Email</b></label>
+        <input type="text" placeholder="Enter Email" name="email" id="email">
+        <label for="psw"><b>Password</b></label>
+        <input type="password" placeholder="Enter Password" name="psw" id="psw">
+        <button type="submit">Login</button>
+      </form>
+    </main>
+</body>
+
+</html>

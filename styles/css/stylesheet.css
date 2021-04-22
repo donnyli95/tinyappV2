@@ -1,0 +1,29 @@
+header {
+  width: 100%;
+  background-color: #DDEDAA;
+  height: 120px;
+}
+header nav {
+  padding: 3em 1.5em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+header nav a:link, header nav a:visited, header nav a:hover, header nav a:active {
+  text-decoration: none;
+}
+header nav a {
+  color: #18020c;
+}
+
+.website-title {
+  padding-right: 2em;
+}
+
+.website-urls {
+  padding: 0 1em;
+}
+
+.error-message {
+  color: red;
+}

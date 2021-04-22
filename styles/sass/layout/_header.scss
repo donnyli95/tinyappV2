@@ -1,0 +1,28 @@
+header {
+  width: 100%;
+  background-color: #DDEDAA;
+  height: 120px;
+
+  nav {
+    padding: 3em 1.5em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    a:link, a:visited, a:hover, a:active {
+      text-decoration: none;
+    }
+
+    a {
+      color: #18020c;
+    }
+  }
+}
+
+.website-title {
+  padding-right: 2em;
+}
+
+.website-urls {
+  padding: 0 1em;
+}

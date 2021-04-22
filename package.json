@@ -2,10 +2,12 @@
   "name": "tinyapp-v2",
   "version": "1.0.0",
   "description": "",
-  "main": "data.js",
+  "main": "server/index.js",
   "scripts": {
-    "start": "./node_modules/.bin/nodemon -L express_server.js",
-    "test": "./node_modules/mocha/bin/mocha"
+    "start": "node server/index.js",
+    "test": "./node_modules/mocha/bin/mocha",
+    "sass": "sass styles/sass/main.scss:styles/css/stylesheet.css --watch --poll --no-source-map",
+    "local": "./node_modules/.bin/nodemon --watch server -e js server/index.js"
   },
   "repository": {
     "type": "git",
@@ -17,5 +19,19 @@
   "bugs": {
     "url": "https://github.com/donnyli95/tinyappV2/issues"
   },
-  "homepage": "https://github.com/donnyli95/tinyappV2#readme"
+  "homepage": "https://github.com/donnyli95/tinyappV2#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
+    "cookie-session": "^1.4.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "mocha": "^8.3.2",
+    "nodemon": "^2.0.7",
+    "sass": "^1.32.11"
+  }
 }
