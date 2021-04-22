@@ -1,0 +1,21 @@
+{
+  "name": "tinyapp-v2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "data.js",
+  "scripts": {
+    "start": "./node_modules/.bin/nodemon -L express_server.js",
+    "test": "./node_modules/mocha/bin/mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/donnyli95/tinyappV2.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/donnyli95/tinyappV2/issues"
+  },
+  "homepage": "https://github.com/donnyli95/tinyappV2#readme"
+}
