@@ -14,42 +14,25 @@ const generateRandomString = () => {
   return result;
 };
 
-const emailExists = (string, object) => {
-  let emailArray = [];
-  for (let randomID in object) {
-    emailArray.push(object[randomID].email);
+const emailExists = (email, database) => {
+  for (let randomID in database) {
+    if (database[randomID].email === email) {
+      return true;
+    }
   }
-
-  if (emailArray.includes(string)) {
-    return true;
-  }
-  
   return false;
-
 };
 
-const passwordMatch = (email, password, database) => {
-  let emailArray = [];
-  let passwordArray = [];
+const passwordMatch = (requestBody, database) => {
+  const { email, psw } = requestBody;
   for (let randomID in database) {
-    emailArray.push(database[randomID].email);
-    passwordArray.push(database[randomID].password);
-  }
-
-  let indicator;
-  if (emailArray.includes(email)) {
-    for (let index in email) {
-      if (emailArray[index] === email) {
-        indicator = index;
-        break;
+    console.log(email, psw);
+    if (database[randomID].email === email) {
+      if (bcrypt.compareSync(psw, database[randomID].password)) {
+        return true;
       }
     }
   }
-
-  if (bcrypt.compareSync(password, passwordArray[indicator])) {
-    return true;
-  }
-
   return false;
 };
 
@@ -75,7 +58,23 @@ const urlsForUser = (id, userObj) => {
   return newURLs;
 };
 
+//Function: Render error page with relevant status code
+const renderErrorPage = (req, res, errorNumber, errorMessage) => {
+  const templateVars = {
+    errorMessage: errorMessage
+  }
+  res.status(errorNumber).render("errors", templateVars);
+}
 
+//Function: update url database and redirect
+const updateURL = (req, res) => {
+  let shortURL = generateRandomString();
+  urlDatabase[shortURL] = {
+    longURL: req.body.newURL,
+    userID: req.session["user_id"]
+  };
+  res.redirect(`/urls/${shortURL}`);
+}
 
-module.exports = { generateRandomString, emailExists, passwordMatch, getID, urlsForUser};
+module.exports = { generateRandomString, emailExists, passwordMatch, getID, urlsForUser, renderErrorPage, updateURL };
 

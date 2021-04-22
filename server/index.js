@@ -1,6 +1,6 @@
 // import data
 const { urlDatabase, users } = require('../scripts/data');
-const { generateRandomString, emailExists, passwordMatch, getID, urlsForUser} = require('../scripts/helperFunctions');
+const { generateRandomString, emailExists, passwordMatch, getID, urlsForUser, renderErrorPage, updateURL } = require('../scripts/helperFunctions');
 
 // express server setup
 const express = require("express");
@@ -26,24 +26,6 @@ app.listen(PORT, () => {
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
-
-//Function: Render error page with relevant status code
-const renderErrorPage = (req, res, errorNumber, errorMessage) => {
-  const templateVars = {
-    errorMessage: errorMessage
-  }
-  res.status(errorNumber).render("errors", templateVars);
-}
-
-//Function: update url database and redirect
-const updateURL = (req, res) => {
-  let shortURL = generateRandomString();
-  urlDatabase[shortURL] = {
-    longURL: req.body.newURL,
-    userID: req.session["user_id"]
-  };
-  res.redirect(`/urls/${shortURL}`);
-}
 
 //Initial Page Redirection
 app.get("/", (req, res) => {
@@ -182,7 +164,7 @@ app.post("/login", (req, res) => {
   //Check if user exists
   if (!emailExists(req.body.email, users)) {
     renderErrorPage(req, res, 403, "Please register first!");
-  } else if (!passwordMatch(req.body.email, req.body.psw, users)) {
+  } else if (!passwordMatch(req.body, users)) {
     renderErrorPage(req, res, 403, "Wrong password");
   } else {
     req.session["user_id"] = getID(req.body.email, users);
@@ -193,12 +175,11 @@ app.post("/login", (req, res) => {
 //Register Post Method
 app.post("/register", (req, res) => {
   let randomID = generateRandomString();
-  //Check if email & password inputs are empty
   if (!req.body.email.length || !req.body.psw.length) {
     renderErrorPage(req, res, 403, "Please Fill Out BOTH Fields");
     // Check if user exists
   } else if (emailExists(req.body.email, users)) {
-    renderErrorPage(req, res, 403, "Wrong password (For this webpage at least...)");
+    renderErrorPage(req, res, 403, "You Already Have An Account!");
   } else {
     users[randomID] = {
       id: randomID,
