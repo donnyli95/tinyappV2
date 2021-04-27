@@ -1,26 +1,21 @@
-<header>
+<header class="header-container">
   <nav>
-    <div class="links">
-      <a href="/urls" class="website-title"><b>TinyApp</b></a>
+    <div class='page-links'>
       <a href="/urls" class="website-urls">My URLs</a>
       <a href="/urls/new" class="website-urls">Create New URL</a>
     </div>
-    <% if(typeof displayName !=='undefined') { %>
+      <a href="/urls" class="website-title"><b>TinyApp</b></a>
+    <% if(typeof displayName == 'undefined') { %>
       <div class="login-information">
-        <form action="/logout" method="POST">
-          <h4>Logged In As: <%= displayName %>
-          </h4>
-          <button type="submit" class="btn btn-dark">Logout</button>
-        </form>
+        <a href="/login"><button type="submit">Login</button></a>
+        <a href="/register"><button type="submit">Register</button></a>
       </div>
     <% } else { %>
       <div class="login-information">
-        <a href="/login">
-          <button type="submit">Login</button>
-        </a>
-        <a href="/register">
-          <button type="submit">Register</button>
-        </a>
+        <form action="/logout" method="POST" class="logout-form">
+          <h4>Logged In As: <%= displayName %></h4>
+          <button type="submit" class="btn btn-dark">Logout</button>
+        </form>
       </div>
     <% } %>
   </nav>

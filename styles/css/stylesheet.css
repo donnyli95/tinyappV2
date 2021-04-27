@@ -1,10 +1,7 @@
 header {
   width: 100%;
-  background-color: #DDEDAA;
-  height: 120px;
 }
 header nav {
-  padding: 3em 1.5em;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -15,6 +12,11 @@ header nav a:link, header nav a:visited, header nav a:hover, header nav a:active
 header nav a {
   color: #18020c;
 }
+header nav form {
+  display: flex;
+  flex-direction: row;
+  padding-right: 1em;
+}
 
 .website-title {
   padding-right: 2em;
@@ -24,6 +26,48 @@ header nav a {
   padding: 0 1em;
 }
 
+.error-container {
+  margin: auto;
+  width: 90%;
+  border: 3px solid green;
+  padding: 10px;
+}
+
 .error-message {
   color: red;
+}
+
+.login-container {
+  margin: auto;
+  width: 90%;
+  border: 3px solid yellow;
+  padding: 10px;
+}
+
+.register-container {
+  margin: auto;
+  width: 90%;
+  border: 3px solid grey;
+  padding: 10px;
+}
+
+.urls-index-container {
+  margin: auto;
+  width: 90%;
+  border: 3px solid green;
+  padding: 10px;
+}
+
+.urls-new-container {
+  margin: auto;
+  width: 90%;
+  border: 3px solid blue;
+  padding: 10px;
+}
+
+.urls-show-container {
+  margin: auto;
+  width: 90%;
+  border: 3px solid red;
+  padding: 10px;
 }

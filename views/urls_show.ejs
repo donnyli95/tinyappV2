@@ -1,27 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
+<head>  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
   <!-- App CSS -->
-  <link rel="stylesheet" href="css/stylesheet.css" type="text/css"/>
+  <link rel="stylesheet" href="/css/stylesheet.css" type="text/css"/>
+  
   <title>URL - TinyApp Example</title>
 </head>
 
 <body>
   <%- include('partials/_header') %>
-    <div>
-      <div>
-        <h5 class="card-title">TinyURL for: <%= longURL %>
-        </h5>
-        <p class="card-text">Short URL: <a href="/u/<%= shortURL %>"><%= shortURL %></a></p>
-        <form action="/urls/<%= shortURL %>" method="POST">
-          <label for="edit"><b>Edit</b></label>
-          <input name='newURL' type="text" placeholder="http://">
-          <button type="submit" class="btn btn-primary">Update<button>
-        </form>
-      </div>
-    </div>
-    <% } %>
+  <main class='urls-show-container'>
+    <h5>TinyURL for: <%= longURL %></h5>
+    <p>Short URL: <a href="/u/<%= shortURL %>"><%= shortURL %></a></p>
+    <form action="/urls/<%= shortURL %>" method="POST">
+      <label for="edit"><b>Edit</b></label>
+      <input name='newURL' type="text" placeholder="http://">
+      <button type="submit">Update</button>
+    </form>
+  </main>
 </body>
-
 </html>

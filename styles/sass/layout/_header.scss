@@ -1,10 +1,7 @@
 header {
   width: 100%;
-  background-color: #DDEDAA;
-  height: 120px;
 
   nav {
-    padding: 3em 1.5em;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -16,6 +13,12 @@ header {
     a {
       color: #18020c;
     }
+
+    form {
+      display: flex;
+      flex-direction: row;
+      padding-right: 1em;
+    }
   }
 }
 
@@ -26,3 +29,6 @@ header {
 .website-urls {
   padding: 0 1em;
 }
+
+
+

@@ -3,14 +3,16 @@
 
 <head>
   <!-- App CSS -->
-  <link rel="stylesheet" href="css/stylesheet.css" type="text/css"/>
+  <link rel="stylesheet" href="/css/stylesheet.css" type="text/css"/>
 
   <title>URL - TinyApp Example</title>
 </head>
 
 <body>
   <%- include('partials/_header') %>
+  <main class="error-container">
     <h1 class="error-message">** <%= errorMessage %> **</h1>
+  </main>
 </body>
 
 </html>

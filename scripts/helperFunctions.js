@@ -26,7 +26,6 @@ const emailExists = (email, database) => {
 const passwordMatch = (requestBody, database) => {
   const { email, psw } = requestBody;
   for (let randomID in database) {
-    console.log(email, psw);
     if (database[randomID].email === email) {
       if (bcrypt.compareSync(psw, database[randomID].password)) {
         return true;
