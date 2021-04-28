@@ -1,40 +1,66 @@
-header {
+.header-container {
   width: 100%;
-}
-header nav {
+  height: 120px;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  align-content: center;
 }
-header nav a:link, header nav a:visited, header nav a:hover, header nav a:active {
+.header-container nav {
+  display: flex;
+  width: 100%;
+  margin: auto;
+}
+.header-container nav a:link, .header-container nav a:visited, .header-container nav a:hover, .header-container nav a:active {
   text-decoration: none;
 }
-header nav a {
+.header-container nav a {
   color: #18020c;
 }
-header nav form {
+.header-container .page-links {
+  padding-left: 2em;
+  width: 25%;
+  float: left;
+}
+.header-container .page-links a {
+  padding: 0 1em;
+}
+.header-container .website-title {
+  font-size: 250%;
+  width: 50%;
+  text-align: center;
+}
+.header-container .login-information {
+  padding-right: 2em;
+  width: 25%;
+  float: right;
+}
+.header-container .login-information a {
+  padding: 0 1em;
+}
+.header-container .login-information form {
   display: flex;
   flex-direction: row;
   padding-right: 1em;
 }
-
-.website-title {
-  padding-right: 2em;
+.header-container .login-information form h4 {
+  padding: 0 1em;
 }
-
-.website-urls {
+.header-container .login-information form bottom {
   padding: 0 1em;
 }
 
 .error-container {
-  margin: auto;
-  width: 90%;
-  border: 3px solid green;
-  padding: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 4em;
 }
-
-.error-message {
-  color: red;
+.error-container h1 {
+  width: 45%;
+  text-align: center;
+  color: #c33;
+  border: 2px solid #f33;
+  background-color: #ffcece;
+  padding: 1em 0;
 }
 
 .login-container {

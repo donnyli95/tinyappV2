@@ -1,10 +1,15 @@
 .error-container {
-  margin: auto;
-  width: 90%;
-  border: 3px solid green;
-  padding: 10px;
-}
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 4em;
 
-.error-message {
-  color: red;
+  h1 {
+    width: 45%;
+    text-align: center;
+    color: #c33;
+    border: 2px solid #f33;
+    background-color: rgb(255, 206, 206);
+    padding: 1em 0;
+  }
 }

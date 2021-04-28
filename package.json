@@ -5,9 +5,10 @@
   "main": "server/index.js",
   "scripts": {
     "start": "node server/index.js",
+    "nodemon2": "nodemon server/index.js",
     "test": "./node_modules/mocha/bin/mocha",
     "sass": "sass styles/sass/main.scss:styles/css/stylesheet.css --watch --poll --no-source-map",
-    "local": "./node_modules/.bin/nodemon --watch server --watch scripts -e js server/index.js"
+    "local": "./node_modules/.bin/nodemon --watch server --watch scripts -e js -L server/index.js"
   },
   "repository": {
     "type": "git",
